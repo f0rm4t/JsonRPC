@@ -1,0 +1,7 @@
+<?php
+
+//all parameters must be correct
+
+define('RPC_URL', 'http://localhost/rpc');
+define('RPC_METHOD', 'method.example');
+define('RPC_PARAMS', json_encode(['key' => 'value']));
