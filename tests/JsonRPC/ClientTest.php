@@ -17,8 +17,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client   = new Client(RPC_URL);
         $response = $client->request(RPC_METHOD, json_decode(RPC_PARAMS, true));
 
-        var_dump($response->result);
-        
         $this->assertInstanceOf('\\JsonRPC\\Client\\Response', $response);
     }
 
