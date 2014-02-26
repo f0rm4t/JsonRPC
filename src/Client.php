@@ -7,21 +7,44 @@ use JsonRPC\Client\Notify;
 use JsonRPC\Client\Response;
 use JsonRPC\Exception\Curl as CurlException;
 
+/**
+ * Клиент взаимодействия с сервером JSON-RPC 2.0
+ */
 class Client
 {
 
+    /** @var string */
     protected $url;
 
+    /**
+     * @param string $url Полный адрес RPC-сервера
+     */
     public function __construct($url)
     {
         $this->url = $url;
     }
 
+    /**
+     * Отправить запрос на сервер.
+     * Дополнительно передается уникальный идентификатор запроса.
+     *
+     * @param string $method Название удаленного метода
+     * @param array $params Массив параметров, которые будут переданы на RPC-сервер
+     * @param string|null $id Идентификатор запроса. Если не указан явно, будет сгенерирован автоматически
+     * @return Response
+     */
     public function request($method, $params = [], $id = null)
     {
         return $this->send(new Request($method, $params, $id));
     }
 
+    /**
+     * Отправить уведомление на сервер.
+     * Метод не передает идентификатор запроса и не возвращает никакого результата.
+     *
+     * @param string $method Название удаленного метода
+     * @param array $params Массив параметров, которые будут переданы на RPC-сервер
+     */
     public function notify($method, $params = [])
     {
         try {
@@ -31,6 +54,13 @@ class Client
         }
     }
 
+    /**
+     * Отправка запроса на сервер JSON-RPC 2.0
+     *
+     * @param Request|Notify|\JsonSerializable $request Сериализуемый объект запроса или уведомления
+     * @return Response
+     * @throws CurlException Если возникла ошибка cURL во время выполнения запроса
+     */
     public function send(\JsonSerializable $request)
     {
         $curl = curl_init();
