@@ -11,10 +11,6 @@ class Request extends Notify
 {
 
     /** @var string */
-    protected $method;
-    /** @var string */
-    protected $params;
-    /** @var string */
     protected $id;
 
     /**
