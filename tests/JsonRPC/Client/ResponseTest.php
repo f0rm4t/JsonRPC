@@ -16,12 +16,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new Response('{"jsonrpc": "2.0", "result": {"foo": "bar"}, "id": 100}');
 
-        $this->assertNotEmpty($response->result);
-        $this->assertNotEmpty($response->result->foo);
-        $this->assertEquals($response->result->foo, 'bar');
-
-        $this->assertNotEmpty($response->id);
-        $this->assertEquals($response->id, 100);
+        $this->assertNotEmpty($response->foo);
+        $this->assertEquals($response->foo, 'bar');
     }
 
     /**
@@ -42,6 +38,21 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testInvalidResponse()
     {
         new Response('invalid json');
+    }
+
+    public function testGetId()
+    {
+        $response = new Response('{"jsonrpc": "2.0", "result": {"foo": "bar"}, "id": 100}');
+        
+        $this->assertEquals($response->getId(), 100);
+    }
+
+    public function testGetResult()
+    {
+        $data     = ['jsonrpc' => '2.0', 'result' => (object) ['foo' => 'bar']];
+        $response = new Response(json_encode($data));
+        
+        $this->assertEquals($response->getResult(), $data['result']);
     }
 
 }

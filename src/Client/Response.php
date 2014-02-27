@@ -13,6 +13,8 @@ class Response
 
     /** @var stdClass */
     protected $response;
+    /** @var mixed */
+    protected $result;
 
     /**
      * @param string $raw_response
@@ -30,6 +32,8 @@ class Response
         if ( ! empty($this->response->error)) {
             throw new RPCException($this->response->error->message, $this->response->error->code);
         }
+
+        $this->result = $this->response->result;
     }
 
     /**
@@ -38,11 +42,31 @@ class Response
      */
     public function __get($property)
     {
-        if ( ! isset($this->response->{$property})) {
+        if ( ! isset($this->result->{$property})) {
             return null;
         }
 
-        return $this->response->{$property};
+        return $this->result->{$property};
+    }
+
+    /**
+     * Получить идентификатор запроса
+     * 
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->response->id;
+    }
+
+    /**
+     * Получить результат запроса
+     *
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->response->result;
     }
 
 }
