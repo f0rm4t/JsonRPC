@@ -15,13 +15,22 @@ class Client
 
     /** @var string */
     protected $url;
+    /** @var array */
+    protected $curl_opts = [
+        CURLOPT_HEADER         => false,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_TIMEOUT        => 5,
+        CURLOPT_HTTPHEADER     => ['Content-type: application/json', 'Accept: application/json']
+    ];
 
     /**
      * @param string $url Полный адрес RPC-сервера
      */
-    public function __construct($url)
+    public function __construct($url, $curl_opts = [])
     {
-        $this->url = $url;
+        $this->url        = $url;
+        $this->curl_opts += $curl_opts;
     }
 
     /**
@@ -67,13 +76,9 @@ class Client
     public function send(\JsonSerializable $request)
     {
         $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => $this->url,
-            CURLOPT_HEADER         => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => json_encode($request),
-            CURLOPT_HTTPHEADER     => ['Content-type: application/json', 'Accept: application/json']
+        curl_setopt_array($curl, $this->curl_opts + [
+            CURLOPT_URL        => $this->url,
+            CURLOPT_POSTFIELDS => json_encode($request),
         ]);
 
         $response   = curl_exec($curl);
