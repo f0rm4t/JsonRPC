@@ -35,7 +35,10 @@ class Client
      */
     public function request($method, $params = [], $id = null)
     {
-        return $this->send(new Request($method, $params, $id));
+        $result   = $this->send(new Request($method, $params, $id));
+        $response = new Response($result);
+
+        return $response;
     }
 
     /**
@@ -83,7 +86,7 @@ class Client
             throw new CurlException($error_msg, $error_code);
         }
 
-        return new Response($response);
+        return $response;
     }
 
 }
