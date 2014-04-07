@@ -29,8 +29,8 @@ class Client
      */
     public function __construct($url, $curl_opts = [])
     {
-        $this->url        = $url;
-        $this->curl_opts += $curl_opts;
+        $this->url       = $url;
+        $this->curl_opts = $curl_opts + $this->curl_opts;
     }
 
     /**
